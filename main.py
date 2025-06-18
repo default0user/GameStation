@@ -66,3 +66,10 @@ GAMESTAION: list[GamestaionType] = [
         "Controller": "Dualsense Controller"
     }
 ]
+
+app = FastAPI()
+
+
+@app.get("/gamestation")
+def gamestation():
+    return GAMESTAION
