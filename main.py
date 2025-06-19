@@ -2,21 +2,21 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 
-class GamestaionPSType(BaseModel):
+class GamestationPSType(BaseModel):
     id: int
     Console: str
     Games: str
     Controller: str
 
 
-class GamestaionPCType(BaseModel):
+class GamestationPCType(BaseModel):
     id: int
     PC: str
     Keyboard: str
     Mouse: str
 
 
-GAMESTAIONPS: list[GamestaionPSType] = [
+GAMESTATIONPS: list[GamestationPSType] = [
 
     {
         "id": 1,
@@ -54,7 +54,7 @@ GAMESTAIONPS: list[GamestaionPSType] = [
 ]
 
 
-GAMESTAIONPC: list[GamestaionPCType] = [
+GAMESTATIONPC: list[GamestationPCType] = [
 
     {
         "id": 1,
@@ -89,6 +89,13 @@ GAMESTAIONPC: list[GamestaionPCType] = [
         "PC": "MSI Codex R2C",
         "Keyboard": "OnePlus Keyboard 81 Pro",
         "Mouse": "Razer Naga V2 Pro"
+    },
+
+    {
+        "id": 6,
+        "PC": "DELL Optiplex 360",
+        "Keyboard": "Logitech G50",
+        "Mouse": "FanTech G70"
     }
 
 ]
@@ -98,18 +105,18 @@ ps = FastAPI()
 
 @ps.get("/gamestationps")
 def gamestationps():
-    return GAMESTAIONPS
+    return GAMESTATIONPS
 
 
 @ps.get("/gamestationpc")
 def gamestationpc():
-    return GAMESTAIONPC
+    return GAMESTATIONPC
 
 
 @ps.get("/gamestationpc/{id}")
 def gamestationpc(id: int):
-    for r in range(len(GAMESTAIONPC)):
-        item = GamestaionPCType(**GAMESTAIONPC[r])
+    for r in range(len(GAMESTATIONPC)):
+        item = GamestationPCType(**GAMESTATIONPC[r])
         if id == item.id:
             return item
 
@@ -118,28 +125,63 @@ def gamestationpc(id: int):
 
 @ps.get("/gamestationps/{id}")
 def gamestation(id: int):
-    for s in range(len(GAMESTAIONPS)):
-        item = GamestaionPSType(**GAMESTAIONPS[s])
+    for s in range(len(GAMESTATIONPS)):
+        item = GamestationPSType(**GAMESTATIONPS[s])
         if (id == item.id):
             return item
     return "item doesn't exist"
 
 
 @ps.post("/gamestationps")
-def gamestation(gamestationps: GamestaionPSType):
-    for s in range(len(GAMESTAIONPS)):
-        if gamestationps.id == GAMESTAIONPS[s]["id"]:
+def gamestation(gamestationps: GamestationPSType):
+    for s in range(len(GAMESTATIONPS)):
+        if gamestationps.id == GAMESTATIONPS[s]["id"]:
             return "item already exist"
 
-        GAMESTAIONPS.append(gamestationps.model_dump())
+        GAMESTATIONPS.append(gamestationps.model_dump())
         return gamestationps
 
 
 @ps.post("/gamestationpc")
-def gamestationpc(gamestationpc: GamestaionPCType):
-    for r in range(len(GAMESTAIONPC)):
-        if gamestationpc.id == GAMESTAIONPC[r].id:
+def gamestationpc(gamestationpc: GamestationPCType):
+    for r in range(len(GAMESTATIONPC)):
+        if gamestationpc.id == GAMESTATIONPC[r]["id"]:
             return "item already exist"
 
-    GAMESTAIONPC.append(gamestationpc.model_dump())
+    GAMESTATIONPC.append(gamestationpc.model_dump())
     return gamestationpc
+
+
+@ps.delete("/gamestationps/{id}")
+def gamestaionps(id: int):
+    for q in range(len(GAMESTATIONPS)):
+        item = GamestationPSType(**GAMESTATIONPS[q])
+        if (id == item.id):
+            GAMESTATIONPS.pop(q)
+            return "id has been removed"
+
+    return "id doesn't found"
+
+
+@ps.delete("/gamestationpc/{id}")
+def gamestaionpc(id: int):
+    for q in range(len(GAMESTATIONPC)):
+        item = GamestationPCType(**GAMESTATIONPC[q])
+        if (id == item.id):
+            GAMESTATIONPC.pop(q)
+            return "id has been removed"
+
+    return "id doesn't found"
+
+
+@ps.put("/gamestationpc/{id}")
+def gamestaionpc(id: int, gamestationpc: GamestationPCType):
+    for o in range(len(GAMESTATIONPC)):
+        item = GamestationPCType(**GAMESTATIONPC[o])
+        if (id == item.id):
+            GAMESTATIONPC[o]["PC"] = gamestationpc.PC
+            GAMESTATIONPC[o]["Keyboard"] = gamestationpc.Keyboard
+            GAMESTATIONPC[o]["Mouse"] = gamestationpc.Mouse
+            return gamestationpc
+
+    return "id doesn't found"
