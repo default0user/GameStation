@@ -48,7 +48,7 @@ GAMESTAIONPS: list[GamestaionPSType] = [
     {
         "id": 5,
         "Console": "Playstation 5",
-        "Gmaes": "Grand Theft Auto VI,Marvel's Spider-man 2,Forza Horizon 5,The Last of Us Part II Remastered",
+        "Games": "Grand Theft Auto VI,Marvel's Spider-man 2,Forza Horizon 5,The Last of Us Part II Remastered",
         "Controller": "Dualsense Controller"
     }
 ]
@@ -107,17 +107,39 @@ def gamestationpc():
 
 
 @ps.get("/gamestationpc/{id}")
-def gamestation(id: int):
+def gamestationpc(id: int):
     for r in range(len(GAMESTAIONPC)):
-        if id == GAMESTAIONPC[r]["id"]:
-            return GAMESTAIONPC[r]
+        item = GamestaionPCType(**GAMESTAIONPC[r])
+        if id == item.id:
+            return item
 
-    return "id doesn't exist"
+    return "item doesn't exist"
 
 
 @ps.get("/gamestationps/{id}")
 def gamestation(id: int):
     for s in range(len(GAMESTAIONPS)):
-        if id == GAMESTAIONPS[s]["id"]:
-            return GAMESTAIONPS[s]
-    return "id doesn't exist"
+        item = GamestaionPSType(**GAMESTAIONPS[s])
+        if (id == item.id):
+            return item
+    return "item doesn't exist"
+
+
+@ps.post("/gamestationps")
+def gamestation(gamestationps: GamestaionPSType):
+    for s in range(len(GAMESTAIONPS)):
+        if gamestationps.id == GAMESTAIONPS[s]["id"]:
+            return "item already exist"
+
+        GAMESTAIONPS.append(gamestationps.model_dump())
+        return gamestationps
+
+
+@ps.post("/gamestationpc")
+def gamestationpc(gamestationpc: GamestaionPCType):
+    for r in range(len(GAMESTAIONPC)):
+        if gamestationpc.id == GAMESTAIONPC[r].id:
+            return "item already exist"
+
+    GAMESTAIONPC.append(gamestationpc.model_dump())
+    return gamestationpc
