@@ -16,7 +16,7 @@ class GamestaionPCType(BaseModel):
     Mouse: str
 
 
-GAMESTAION: list[GamestaionPSType] = [
+GAMESTAIONPS: list[GamestaionPSType] = [
 
     {
         "id": 1,
@@ -53,7 +53,8 @@ GAMESTAION: list[GamestaionPSType] = [
     }
 ]
 
-GAMESTAION: list[GamestaionPCType] = [
+
+GAMESTAIONPC: list[GamestaionPCType] = [
 
     {
         "id": 1,
@@ -95,15 +96,28 @@ GAMESTAION: list[GamestaionPCType] = [
 ps = FastAPI()
 
 
-@ps.get("/gamestation")
-def gamestation():
-    return GAMESTAION
+@ps.get("/gamestationps")
+def gamestationps():
+    return GAMESTAIONPS
 
 
-@ps.get("/gamestation,{id}")
+@ps.get("/gamestationpc")
+def gamestationpc():
+    return GAMESTAIONPC
+
+
+@ps.get("/gamestationpc/{id}")
 def gamestation(id: int):
-    for r in range(len(GAMESTAION)):
-        if id == GAMESTAION[r]["id"]:
-            return GAMESTAION
+    for r in range(len(GAMESTAIONPC)):
+        if id == GAMESTAIONPC[r]["id"]:
+            return GAMESTAIONPC[r]
 
+    return "id doesn't exist"
+
+
+@ps.get("/gamestationps/{id}")
+def gamestation(id: int):
+    for s in range(len(GAMESTAIONPS)):
+        if id == GAMESTAIONPS[s]["id"]:
+            return GAMESTAIONPS[s]
     return "id doesn't exist"
