@@ -2,20 +2,21 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 
-class GamestaionType(BaseModel):
+class GamestaionPSType(BaseModel):
     id: int
     Console: str
     Games: str
     Controller: str
 
-    class GamestaionType(BaseModel):
-        id: int
-        PC: str
-        Keyboard: str
-        Mouse: str
+
+class GamestaionPCType(BaseModel):
+    id: int
+    PC: str
+    Keyboard: str
+    Mouse: str
 
 
-GAMESTAION: list[GamestaionType] = [
+GAMESTAION: list[GamestaionPSType] = [
 
     {
         "id": 1,
@@ -52,9 +53,57 @@ GAMESTAION: list[GamestaionType] = [
     }
 ]
 
-app = FastAPI()
+GAMESTAION: list[GamestaionPCType] = [
+
+    {
+        "id": 1,
+        "PC": "Lenovo LOQ Tower gen 9 (Intel)",
+        "Keyboard": "Logitech G213",
+        "Mouse": "Razer Viper V3 Pro"
+    },
+
+    {
+        "id": 2,
+        "PC": "HP Pro Tower 400 G9",
+        "Keyboard": "Asus ROG Strix Scope II RX",
+        "Mouse": "Corsair SCIMITAR RGB ELITE"
+    },
+
+    {
+        "id": 3,
+        "PC": "PREDATOR ORION X",
+        "Keyboard": "Keychron Q5 Pro",
+        "Mouse": "Corsair M75 Air"
+    },
+
+    {
+        "id": 4,
+        "PC": "ALIENWARE AREA-51",
+        "Keyboard": "Turtle Beach Vulcan II TKL Pro",
+        "Mouse": "Redragon M686 Vampire Elite"
+    },
+
+    {
+        "id": 5,
+        "PC": "MSI Codex R2C",
+        "Keyboard": "OnePlus Keyboard 81 Pro",
+        "Mouse": "Razer Naga V2 Pro"
+    }
+
+]
+
+ps = FastAPI()
 
 
-@app.get("/gamestation")
+@ps.get("/gamestation")
 def gamestation():
     return GAMESTAION
+
+
+@ps.get("/gamestation,{id}")
+def gamestation(id: int):
+    for r in range(len(GAMESTAION)):
+        if id == GAMESTAION[r]["id"]:
+            return GAMESTAION
+
+    return "id doesn't exist"
